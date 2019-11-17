@@ -2,10 +2,24 @@ const todosTypes = {
   ADD_ITEM: 'ADD_ITEM',
   DELETE_ITEM: 'DELETE_ITEM',
   ON_CHANGE: 'ON_CHANGE',
-  ON_CHECKED: 'ON_CHECKED'
+  ON_CHECKED: 'ON_CHECKED',
+  SET_ITEMS: 'SET_ITEMS'
 };
 
 export const todosActions = {
+  loadItems: () => (dispatch) => {
+    fetch('/todos').then(apiResponse => {
+      apiResponse.json().then(json => {
+        dispatch(todosActions.setItems(json));
+      });
+    });
+  },
+  setItems: (todos) => (
+    {
+      type: todosTypes.SET_ITEMS,
+      todos: todos
+    }
+  ),
   addItem: () => (
     {
       type: todosTypes.ADD_ITEM,
@@ -33,19 +47,12 @@ export const todosActions = {
   )
 };
 
-const initialState = [
-  {
-    done: true,
-    title: "Learn React"
-  },
-  {
-    done: false,
-    title: "Learn Redux"
-  }
-];
+const initialState = [];
 
 export const todosReducer = (state = initialState, action) => {
   switch(action.type) {
+    case todosTypes.SET_ITEMS:
+      return action.todos;
     case todosTypes.ADD_ITEM:
       return addingItem(state, action);
     case todosTypes.DELETE_ITEM:

@@ -28,7 +28,10 @@ const Button = styled.button`
   margin: 10px;
 `;
 
-const TodosList = ( {todos, addItem, deleteItem, onChange, onChecked} ) => {
+const TodosList = ( {todos, addItem, deleteItem, onChange, onChecked, loadItems} ) => {
+  React.useEffect(() => {
+    loadItems();
+  }, []);
 
   return (
     <Container>
@@ -62,7 +65,8 @@ const mapDispatchToProps = (dispatch) => (
     addItem: () => dispatch(todosActions.addItem()),
     deleteItem: (i) => dispatch (todosActions.deleteItem(i)),
     onChange: (value, i) => dispatch(todosActions.onChange(value, i)),
-    onChecked: (i) => dispatch(todosActions.onChecked(i))
+    onChecked: (i) => dispatch(todosActions.onChecked(i)),
+    loadItems: () => dispatch(todosActions.loadItems()),
   }
 );
 
